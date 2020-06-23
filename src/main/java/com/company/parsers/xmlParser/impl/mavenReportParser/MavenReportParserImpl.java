@@ -1,5 +1,7 @@
-package com.company.parsers.xmlParser;
+package com.company.parsers.xmlParser.impl.mavenReportParser;
 
+import com.company.parsers.xmlParser.BuildReportParser;
+import com.company.parsers.xmlParser.exception.MavenParserException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.JacksonXmlModule;
@@ -8,11 +10,11 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import java.io.File;
 import java.io.IOException;
 
-public class MavenReportParser implements BuildReportParser {
+public class MavenReportParserImpl implements BuildReportParser {
     private ObjectMapper xmlMapper;
     private ObjectMapper jsonMapper;
 
-    public MavenReportParser() {
+    public MavenReportParserImpl() {
         setupMappers();
     }
 
@@ -24,8 +26,12 @@ public class MavenReportParser implements BuildReportParser {
     }
 
     @Override
-    public String parseFromXmlToJson(File file) throws IOException {
-        return jsonMapper.writeValueAsString(getMavenTestReport(file));
+    public String parseToJson(File file){
+        try {
+            return jsonMapper.writeValueAsString(getMavenTestReport(file));
+        } catch (IOException e) {
+            throw new MavenParserException(e);
+        }
     }
 
     private MavenTestReport getMavenTestReport(File file) throws IOException {

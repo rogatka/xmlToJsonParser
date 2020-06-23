@@ -1,4 +1,4 @@
-package com.company.parsers.xmlParser;
+package com.company.parsers.xmlParser.impl.mavenReportParser;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -15,16 +15,16 @@ import java.util.Objects;
 import static org.junit.jupiter.api.Assertions.*;
 
 @Log4j
-public class TestMavenReportParser {
+public class TestMavenReportParserImpl {
     private final static String TEST_FILE_ALL_SUCCESS = "TEST-report.AllSuccess.xml";
     private final static String TEST_FILE_2_FAILURES_2_ERRORS = "TEST-report.NoSuccess2Failures2Errors.xml";
     private final static String TEST_FILE_3_SUCCESS_1_FAILURE_WITH_MESSAGE_1_ERROR = "TEST-report.3Success1FailureWithMessage1Error.xml";
-    private static MavenReportParser reportParser;
+    private static MavenReportParserImpl reportParser;
     private static ObjectMapper jsonMapper;
 
     @BeforeAll
     public static void setUp() {
-        reportParser = new MavenReportParser();
+        reportParser = new MavenReportParserImpl();
         jsonMapper = new ObjectMapper();
     }
 
@@ -32,7 +32,7 @@ public class TestMavenReportParser {
     public void testParseReturnsNotNullAndNotEmpty() throws URISyntaxException, IOException {
         File testFile = getFile(TEST_FILE_ALL_SUCCESS);
         log.info(testFile.getAbsolutePath());
-        String json = reportParser.parseFromXmlToJson(testFile);
+        String json = reportParser.parseToJson(testFile);
         assertNotNull(json);
         assertNotEquals("", json);
     }
@@ -41,7 +41,7 @@ public class TestMavenReportParser {
     public void allTestsSuccessReportParsingShouldReturnRightJson() throws URISyntaxException, IOException {
         File testFile = getFile(TEST_FILE_ALL_SUCCESS);
         log.info(testFile.getAbsolutePath());
-        String json = reportParser.parseFromXmlToJson(testFile);
+        String json = reportParser.parseToJson(testFile);
         JsonNode node = jsonMapper.readTree(json);
 
         assertEquals(4, node.findValue("tests").asInt());
@@ -58,7 +58,7 @@ public class TestMavenReportParser {
     public void NoSuccess2Failures2ErrorsReportParsingShouldReturnRightJson() throws URISyntaxException, IOException {
         File testFile = getFile(TEST_FILE_2_FAILURES_2_ERRORS);
         log.info(testFile.getAbsolutePath());
-        String json = reportParser.parseFromXmlToJson(testFile);
+        String json = reportParser.parseToJson(testFile);
         JsonNode node = jsonMapper.readTree(json);
 
         assertEquals(4, node.findValue("tests").asInt());
@@ -92,7 +92,7 @@ public class TestMavenReportParser {
     public void ThreeSuccess1FailureWithMessage1ErrorReportParsingShouldReturnRightJson() throws URISyntaxException, IOException {
         File testFile = getFile(TEST_FILE_3_SUCCESS_1_FAILURE_WITH_MESSAGE_1_ERROR);
         log.info(testFile.getAbsolutePath());
-        String json = reportParser.parseFromXmlToJson(testFile);
+        String json = reportParser.parseToJson(testFile);
         JsonNode node = jsonMapper.readTree(json);
 
         assertEquals(5, node.findValue("tests").asInt());

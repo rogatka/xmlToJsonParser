@@ -1,4 +1,4 @@
-package com.company.parsers.xmlParser;
+package com.company.parsers.xmlParser.impl.mavenReportParser;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import lombok.EqualsAndHashCode;
