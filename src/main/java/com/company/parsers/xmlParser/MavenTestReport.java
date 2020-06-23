@@ -30,10 +30,10 @@ public class MavenTestReport {
     private List<MavenTestCase> testCases;
 
     public int getSuccess() {
-        int successCount = tests - errors - failures - skipped;
-        if (successCount < 0) {
+        success = tests - errors - failures - skipped;
+        if (success < 0) {
             throw new IllegalArgumentException("Success tests count must be more or equals 0");
         }
-        return successCount;
+        return success;
     }
 }
